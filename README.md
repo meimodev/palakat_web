@@ -1,5 +1,5 @@
-# * Palakat web
+# *Palakat web*
 
 supposedly providing usefull info for events that happend around the region
 
-* build with react + next
+_build with react + next_

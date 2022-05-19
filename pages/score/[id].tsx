@@ -101,7 +101,7 @@ const ScoreWithID = () => {
 
   const _buildScoreCard = () => {
     return (
-      <div className=" flex rounded-xl bg-zinc-700 px-12 py-6 ">
+      <div className="flex select-none rounded-xl bg-zinc-700 px-12 py-6 ">
         <div className="flex-1 self-center text-center text-2xl font-bold">
           SCORE RESULT
         </div>

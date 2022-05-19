@@ -1,5 +1,3 @@
-import type { NextPage } from 'next'
-import { AppProps } from 'next/app'
 import Link from 'next/link'
 
 type Props = {

@@ -5,7 +5,7 @@ import NavBar from '../../components/NavBar'
 
 const Events: NextPage = () => {
   return (
-    <div className="min-h-screen  bg-zinc-900  font-openSans text-gray-50">
+    <div className="min-h-screen select-none bg-zinc-900  font-openSans text-gray-50">
       <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

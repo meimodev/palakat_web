@@ -19,8 +19,8 @@ const NavBar = ({ activeTitle }: Props) => {
   )
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-gradient-to-b from-zinc-900 font-openSans text-sm ">
-      <div className="h-40  pt-6 pl-12 pr-12 ">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-zinc-900 font-openSans text-sm ">
+      <div className="h-28  pt-6 pl-12 pr-12 ">
         <div className="flex items-center justify-around">
           <div className="flex-1 text-4xl font-bold">PALAKAT</div>
           <div className="flex-2 flex justify-around gap-16 ">

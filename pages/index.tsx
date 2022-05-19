@@ -1,42 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import NavBar from '../components/NavBar'
 
 const Home: NextPage = () => {
-  const NavBar = ({ activeTitle }: any) => {
-    const _link = ({ href, title, isActive }: any) => (
-      <div>
-        <div className="flex flex-col items-center justify-center gap-1">
-          <Link href={href}>{title}</Link>
-          {isActive ? (
-            <div className="h-1 w-10 rounded-md bg-gray-200 "></div>
-          ) : null}
-        </div>
-      </div>
-    )
-
-    return (
-      <div className="fixed top-6 left-12 right-12 font-openSans text-sm">
-        <div className="flex h-12 items-center justify-around ">
-          <div className="flex-1 text-4xl font-bold">PALAKAT</div>
-          <div className="flex-2 flex justify-around gap-16 ">
-            <_link href="/" title="Home" isActive={activeTitle === 'Home'} />
-            <_link
-              href="/events"
-              title="Events"
-              isActive={activeTitle === 'Events'}
-            />
-            <_link
-              href="/contact"
-              title="Contact"
-              isActive={activeTitle === 'Contact'}
-            />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   const _buildEventInfoCards = () => {
     const _infoCard = ({ title, subTitle, href }: any) => (
       <Link href={href} passHref>

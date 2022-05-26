@@ -3,14 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import MainAdminCard from '../../components/MainAdminCard'
 
-import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore'
+import { arrayUnion, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
 import CurrentStandingCard from '../../components/CurrentStandingCard'
 import CustomDialog from '../../components/CustomDialog'
@@ -121,20 +114,15 @@ const Admin = () => {
     )
   }
 
-  const handleOnClickLive = () => {
-    console.log('GOING LIVE')
+  const handleOnClickLive = async () => {
+    await updateDoc(docReference, {
+      live: !_pageData.live,
+    })
   }
 
   return (
     <div className="min-h-screen select-none bg-zinc-900 font-openSans text-gray-50">
       <Head>
-        <meta charSet="UTF-8" />
-
-        <link
-          rel="stylesheet"
-          href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
-        ></link>
-
         <title>Admin | {_pageData.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -231,11 +219,11 @@ const Admin = () => {
           }}
         />
 
-        <CurrentStandingCard
+        {/* <CurrentStandingCard
           pageData={_judges.data}
           participants={_pageData.participants.data}
           stages={_pageData.stages.data}
-        />
+        /> */}
       </main>
       <div className="py-16"></div>
 

@@ -26,7 +26,8 @@ const CurrentStandingCard = ({ pageData, participants, stages }: any) => {
 
       data.forEach((d: any) => {
         if (d.participant.toLowerCase() === p.name.toLowerCase()) {
-          push.scores.push({ stage: d.stage, score: d.score })
+          let t: any = { stage: d.stage, score: d.score }
+          push.scores.push(t)
         }
       })
 

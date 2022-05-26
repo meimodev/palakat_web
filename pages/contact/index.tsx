@@ -9,15 +9,7 @@ const Contact: NextPage = () => {
 
       <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-900 bg-cover p-12 text-center">
         <Head>
-          <meta charSet="UTF-8" />
-
-          <link
-            rel="stylesheet"
-            href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
-          ></link>
-
           <title>Palakat | Contact Us</title>
-          <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <main className="w-full-4 flex flex-col gap-3 font-openSans">

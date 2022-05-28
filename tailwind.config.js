@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       fontFamily: {
         openSans: ["'Open Sans'", 'sans-serif'],
+        lemon: ['Lemon/Milk'],
       },
     },
   },

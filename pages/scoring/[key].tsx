@@ -7,7 +7,6 @@ import { db } from '../../firebase'
 import {
   arrayUnion,
   doc,
-  DocumentReference,
   getDoc,
   onSnapshot,
   updateDoc,

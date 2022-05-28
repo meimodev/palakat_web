@@ -22,6 +22,9 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
           rel="stylesheet"
         />
+        <style>
+          @import url('http://www.fontsaddict.com/fontface/lemonmilk.ttf');
+        </style>
 
         <link rel="icon" href="/favicon.ico" />
       </Head>

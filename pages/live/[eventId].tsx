@@ -34,6 +34,7 @@ const LiveEvent = () => {
 
     live: false,
     done: false,
+    break: false,
 
     participants: { data: [], playing: 0, title: '-' },
     stages: { data: [{ name: '' }], playing: 0, title: '-' },
@@ -47,51 +48,51 @@ const LiveEvent = () => {
     scores: [],
   })
 
-  const mockScoreData = [
-    { participant: '1 Participant', score: 2.2, stage: 'Beginner Run 1st' },
-    { participant: '1 Participant', score: 3, stage: 'Beginner Run 1st' },
-    { participant: '1 Participant', score: 5, stage: 'Beginner Run 1st' },
-    {
-      participant: '4 Participant',
-      score: 7.6,
-      stage: 'Beginner Run 1st',
-    },
-    {
-      participant: '4 Participant',
-      score: 7.4,
-      stage: 'Beginner Run 1st',
-    },
-    {
-      participant: '4 Participant',
-      score: 7.0,
-      stage: 'Beginner Run 2nd',
-    },
-    {
-      participant: '2 Participant',
-      score: 7.6,
-      stage: 'Beginner Run 1st',
-    },
-    {
-      participant: '5 Participant',
-      score: 7.6,
-      stage: 'Beginner Run 1st',
-    },
-    {
-      participant: '3 Participant',
-      score: 7.6,
-      stage: 'Beginner Run 1st',
-    },
-    {
-      participant: '5 Participant',
-      score: 7.6,
-      stage: 'Beginner Run 2nd',
-    },
-    {
-      participant: '5 Participant',
-      score: 7.6,
-      stage: 'Beginner Run 2nd',
-    },
-  ]
+  // const mockScoreData = [
+  //   { participant: '1 Participant', score: 2.2, stage: 'Beginner Run 1st' },
+  //   { participant: '1 Participant', score: 3, stage: 'Beginner Run 1st' },
+  //   { participant: '1 Participant', score: 5, stage: 'Beginner Run 1st' },
+  //   {
+  //     participant: '4 Participant',
+  //     score: 7.6,
+  //     stage: 'Beginner Run 1st',
+  //   },
+  //   {
+  //     participant: '4 Participant',
+  //     score: 7.4,
+  //     stage: 'Beginner Run 1st',
+  //   },
+  //   {
+  //     participant: '4 Participant',
+  //     score: 7.0,
+  //     stage: 'Beginner Run 2nd',
+  //   },
+  //   {
+  //     participant: '2 Participant',
+  //     score: 7.6,
+  //     stage: 'Beginner Run 1st',
+  //   },
+  //   {
+  //     participant: '5 Participant',
+  //     score: 7.6,
+  //     stage: 'Beginner Run 1st',
+  //   },
+  //   {
+  //     participant: '3 Participant',
+  //     score: 7.6,
+  //     stage: 'Beginner Run 1st',
+  //   },
+  //   {
+  //     participant: '5 Participant',
+  //     score: 7.6,
+  //     stage: 'Beginner Run 2nd',
+  //   },
+  //   {
+  //     participant: '5 Participant',
+  //     score: 7.6,
+  //     stage: 'Beginner Run 2nd',
+  //   },
+  // ]
   useEffect(() => {
     initDataListener()
   }, [])
@@ -101,7 +102,6 @@ const LiveEvent = () => {
   }, [_judges, _data])
 
   const initDataListener = () => {
-    console.log('init data listener')
     onSnapshot(docReference, (doc) => {
       let d: any = doc.data()
       _setData({ ...d })
@@ -241,12 +241,31 @@ const LiveEvent = () => {
     )
   }
 
+  const sortByPoint = (obj) => {
+    const order = []
+    const res = {}
+    Object.keys(obj).forEach((key) => {
+      return (order[obj[key]['total'] - 1] = key)
+    })
+    order.forEach((key) => {
+      res[key] = obj[key]
+    })
+    return res
+  }
+
   const _buildScoreRow = () => {
-    const curr = _current
-    console.log(curr)
+    let curr = _current
+
+    // console.log({ message: 'before', curr })
+    // curr = sortByPoint(curr)
+    console.log({ message: 'after', curr })
+
     const sepperateRow = (start: number, finish: number) => {
-      // console.log({ start, finish, curr })
-      return Object.keys(curr).map((e: any, i: number) => {
+      //make the object an 'array'
+      let objects = Object.keys(curr).sort((a, b) => {
+        return curr[b].total - curr[a].total
+      })
+      return objects.map((e: any, i: number) => {
         let alteredIndex = i + start
         let alteredFinish =
           finish > Object.keys(curr).length ? Object.keys(curr).length : finish
@@ -259,7 +278,6 @@ const LiveEvent = () => {
         if (!Object.keys(curr)[alteredIndex]) {
           return
         }
-        console.log({ data })
         Object.keys(data).forEach((ee: any) => {
           if (ee.toLowerCase() !== 'total' && ee.toLowerCase() !== 'active') {
             scores.push(data[ee])
@@ -306,7 +324,7 @@ const LiveEvent = () => {
           </div>
           <div className="relative h-28 ">
             <img
-              className="absolute -bottom-52 left-0 right-0 h-64 w-64"
+              className="absolute -bottom-44 left-0 right-0 h-52 w-52"
               src="/images/logo-mapalus.png"
               alt="logo mapalus image"
             />
@@ -315,6 +333,16 @@ const LiveEvent = () => {
         <div className=" flex-1 overflow-hidden p-4">
           <_buildScoreRow />
         </div>
+        <img
+          className="absolute left-[23rem] bottom-4 h-20 w-24 "
+          src="/images/logo-aron.png"
+          alt="Logo aron"
+        />
+        <img
+          className="absolute left-64 -bottom-0 h-32 w-24"
+          src="/images/logo-minahasa-skate.png"
+          alt="Logo minahasa skate"
+        />
       </main>
     </div>
   )

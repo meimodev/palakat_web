@@ -3,19 +3,10 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import MainAdminCard from '../../components/MainAdminCard'
 
-import {
-  arrayUnion,
-  deleteField,
-  doc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore'
+import { arrayUnion, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
-import CurrentStandingCard from '../../components/CurrentStandingCard'
 import CustomDialog from '../../components/CustomDialog'
 import { QRCodeSVG } from 'qrcode.react'
-import { async } from '@firebase/util'
 
 const Admin = () => {
   const router = useRouter()
@@ -29,6 +20,9 @@ const Admin = () => {
     region: '-',
     // judges: { data: [], playing: -1, title: '-' },
     live: false,
+    done: false,
+    break: false,
+
     participants: { data: [], playing: -1, title: '-' },
     stages: { data: [], playing: -1, title: '-' },
     notes: [],

@@ -1,17 +1,53 @@
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import NavBar from '../../components/NavBar'
+import { db } from '../../firebase'
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from 'firebase/firestore'
 
 const ScoreWithID = () => {
-  const router = useRouter()
-  const { id } = router.query
+  const docReference = doc(db, 'events', 'come-and-skate-tondano-2022')
+  const docReferenceJudges = doc(
+    db,
+    'events',
+    'come-and-skate-tondano-2022-judges'
+  )
 
-  const data = {
-    title: 'Super exciting event day 2022',
-    date: '22 November 1992',
-    time: '15:00 AM',
-    place: 'Lapangan Samrat Tondano',
-    region: 'Tondano - Minahasa',
+  const [_data, _setData] = useState({
+    title: '-',
+    date: '-',
+    time: '-',
+    place: '-',
+    region: '-',
+
+    live: false,
+    done: false,
+    break: false,
+
+    participants: { data: [], playing: 0, title: '-' },
+    stages: { data: [{ name: '' }], playing: 0, title: '-' },
+    notes: [],
+  })
+  const [_current, _setCurrent] = useState({})
+  const [_judges, _setJudges] = useState({
+    data: [],
+    playing: -1,
+    title: '-',
+    scores: [],
+  })
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    let docSnap = await getDoc(docReference)
+    let d: any = docSnap.data()
+    _setData({ ...d })
   }
 
   type TableRowProp = {
@@ -41,59 +77,32 @@ const ScoreWithID = () => {
     )
   }
 
-  const _buildTable = () => {
+  const calculateData = () => {}
+
+  const _buildTable = ({ head, data, title }) => {
     return (
       <div className="mt-6 rounded-sm bg-zinc-100  text-zinc-900">
         <div className="px-6 pt-6">
-          <h1 className="text-2xl font-bold">CLASS NAME</h1>
-          <p className="text-sm  text-zinc-500">{data.title}</p>
+          <h1 className="text-2xl font-bold uppercase">{title}</h1>
+          <p className="text-sm  text-zinc-500">{_data.title}</p>
         </div>
         <div className="pb-8 ">
           <TableRow
             isHead
             index={'#'}
-            name={'Name'}
-            runs={['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Total']}
+            name={head[1]}
+            runs={[...head.filter((e, i) => i > 1)]}
           />
-          <TableRow
-            index={'1'}
-            isAccent
-            name={'Jhonny Mabembox'}
-            runs={[10, 11, 12, 2.12, 14.99, 999.99]}
-          />
-          <TableRow
-            index={'2'}
-            name={'Marhayarudin Hartanus'}
-            runs={[7, 12, 0, 99.99, 99.99, 999.99]}
-          />
-          <TableRow
-            index={'3'}
-            isAccent
-            name={'Jhonny Mabembox'}
-            runs={[10, 11, 12, 2.12, 14.99, 999.99]}
-          />
-          <TableRow
-            index={'4'}
-            name={'Marhayarudin Hartanus'}
-            runs={[7, 12, 0, 99.99, 99.99, 999.99]}
-          />
-          <TableRow
-            index={'5'}
-            isAccent
-            name={'Jhonny Mabembox'}
-            runs={[10, 11, 12, 2.12, 14.99, 999.99]}
-          />
-          <TableRow
-            index={'6'}
-            name={'Marhayarudin Hartanus'}
-            runs={[7, 12, 0, 99.99, 99.99, 999.99]}
-          />
-          <TableRow
-            index={'7'}
-            isAccent
-            name={'Marhayarudin Hartanus'}
-            runs={[7, 12, 0, 99.99, 99.99, 999.99]}
-          />
+          {data.map((e: any, i: number) => {
+            return (
+              <TableRow
+                index={(i + 1).toString()}
+                isAccent={i % 2 === 0}
+                name={e.name}
+                runs={e.scores}
+              />
+            )
+          })}
         </div>
       </div>
     )
@@ -106,13 +115,13 @@ const ScoreWithID = () => {
           SCORE RESULT
         </div>
         <div className="flex flex-1 flex-col ">
-          <div className="text-lg font-bold">{data.title.toUpperCase()}</div>
+          <div className="text-lg font-bold">{_data.title.toUpperCase()}</div>
           <div className="flex gap-1 text-sm font-light">
-            <div>{data.date}</div>
+            <div>{_data.date}</div>
             <div>|</div>
-            <div>{data.time}</div>
+            <div>{_data.time}</div>
           </div>
-          <div className="text-sm font-light">{data.place}</div>
+          <div className="text-sm font-light">{_data.place}</div>
         </div>
       </div>
     )
@@ -121,10 +130,7 @@ const ScoreWithID = () => {
   return (
     <div className="min-h-screen  bg-zinc-900  font-openSans text-gray-50">
       <Head>
-        <meta charSet="UTF-8" />
-
-        <title>Score | {data.title}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Score | {_data.title}</title>
       </Head>
 
       <div className=""></div>
@@ -134,9 +140,41 @@ const ScoreWithID = () => {
       <main className="p-12 pt-32">
         <_buildScoreCard />
 
-        <_buildTable />
-        <_buildTable />
-        <_buildTable />
+        <_buildTable
+          title="Beginner Run"
+          head={['#', 'Name', '1st', '2nd', 'Total']}
+          data={[
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+          ]}
+        />
+
+        <_buildTable
+          title="Open Run"
+          head={['#', 'Name', '1st', '2nd', 'Total']}
+          data={[
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+          ]}
+        />
+
+        <_buildTable
+          title="Final Beginner Run"
+          head={['#', 'Name', '1st', '2nd', 'Total']}
+          data={[
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+          ]}
+        />
+
+        <_buildTable
+          title="Final Beginner Run"
+          head={['#', 'Name', '1st', '2nd', 'Total']}
+          data={[
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+            { name: 'Jhonny Manembo', scores: [2.3, 4.4, 6.7] },
+          ]}
+        />
       </main>
     </div>
   )

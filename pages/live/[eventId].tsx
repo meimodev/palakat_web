@@ -213,16 +213,16 @@ const LiveEvent = () => {
       ? "bg-[url('/images/player-name-active.png')]"
       : "bg-[url('/images/player-name-inactive.png')]"
 
-    const color = active ? 'text-zinc-600' : 'text-zinc-50'
+    const color = active ? 'text-zinc-700' : 'text-zinc-900'
 
     return (
       <div className="flex gap-1 font-bold">
         <div
           className={`flex h-11 w-64 items-center bg-contain bg-no-repeat ${playerNameBackground}`}
         >
-          <div className={`text-md flex items-center pl-3 font-bold ${color}`}>
+          <div className={`text-md flex items-center pl-3  ${color}`}>
             <p className="pr-0.5 text-sm">#</p>
-            <p>{index}</p>
+            <p className="w-4">{index}</p>
             <p className="pl-2">{name}</p>
           </div>
         </div>
@@ -243,8 +243,10 @@ const LiveEvent = () => {
 
   const _buildScoreRow = () => {
     const curr = _current
-    const sepperateRow = (start = 0, finish = 3) =>
-      Object.keys(curr).map((e: any, i) => {
+    console.log(curr)
+    const sepperateRow = (start: number, finish: number) => {
+      // console.log({ start, finish, curr })
+      return Object.keys(curr).map((e: any, i: number) => {
         let alteredIndex = i + start
         let alteredFinish =
           finish > Object.keys(curr).length ? Object.keys(curr).length : finish
@@ -253,19 +255,20 @@ const LiveEvent = () => {
         }
         let data = curr[e]
         let scores = []
+
+        if (!Object.keys(curr)[alteredIndex]) {
+          return
+        }
+        console.log({ data })
         Object.keys(data).forEach((ee: any) => {
-          if (
-            ee.toLowerCase() === 'total' ||
-            ee.toLowerCase() === 'active' ||
-            ee.toLowerCase() === 'stage'
-          ) {
+          if (ee.toLowerCase() !== 'total' && ee.toLowerCase() !== 'active') {
+            scores.push(data[ee])
             return
           }
-          scores.push(data[ee])
         })
         return (
           <_buildScoreCard
-            key={alteredIndex}
+            key={Object.keys(curr)[alteredIndex]}
             index={alteredIndex + 1}
             name={Object.keys(curr)[alteredIndex]}
             scores={scores}
@@ -273,6 +276,7 @@ const LiveEvent = () => {
           />
         )
       })
+    }
 
     return (
       <div className="flex justify-around gap-3">
@@ -297,18 +301,18 @@ const LiveEvent = () => {
               alt="logo image"
             ></img>
           </div>
-          <div className="  text-center text-6xl font-bold uppercase shadow-black drop-shadow-xl">
+          <div className=" text-center text-6xl font-bold uppercase shadow-black drop-shadow-xl">
             {_data.stages.data[_data.stages.playing].name}
           </div>
           <div className="relative h-28 ">
             <img
-              className="absolute -bottom-44 left-0 right-0 h-64 w-64"
+              className="absolute -bottom-52 left-0 right-0 h-64 w-64"
               src="/images/logo-mapalus.png"
               alt="logo mapalus image"
             />
           </div>
         </div>
-        <div className=" flex-1 overflow-hidden p-4 text-zinc-50">
+        <div className=" flex-1 overflow-hidden p-4">
           <_buildScoreRow />
         </div>
       </main>

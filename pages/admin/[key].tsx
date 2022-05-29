@@ -37,6 +37,10 @@ const Admin = () => {
   const [_qrCode, _setQrCode] = useState('')
   const [_scorePools, _setScorePools] = useState([])
 
+  const [_newParticipantName, _setNewParticipantName] = useState('')
+  const [_newParticipantDialogOpen, _setNewParticipantDialogOpen] =
+    useState(false)
+
   const generateRandomId = () => {
     return Math.random().toString(36).replace('0.', '')
   }
@@ -157,6 +161,19 @@ const Admin = () => {
     })
   }
 
+  const handleOnClickNewParticipant = async () => {
+    // TODO add the validation logics for broad users
+
+    await updateDoc(docReference, {
+      'participants.data': arrayUnion({
+        name: _newParticipantName,
+        action: '-',
+      }),
+    })
+
+    _setNewParticipantDialogOpen(false)
+  }
+
   return (
     <div className="min-h-screen select-none bg-zinc-900 font-openSans text-gray-50">
       <Head>
@@ -242,7 +259,9 @@ const Admin = () => {
               participants: { ..._pageData.participants, data, playing },
             })
           }}
-          onAdd={undefined}
+          onAdd={() => {
+            _setNewParticipantDialogOpen(true)
+          }}
           onNext={async (newData: any, playing: any) => {
             await updateDoc(docReference, {
               participants: {
@@ -287,6 +306,45 @@ const Admin = () => {
           ) : null}
           <div className="self-end rounded-xl border-2 border-zinc-200 py-2 px-4">
             <p>OK</p>
+          </div>
+        </div>
+      </CustomDialog>
+      <CustomDialog open={_newParticipantDialogOpen} onDismiss={() => {}}>
+        <div className="flex flex-col items-start justify-between text-zinc-100">
+          <form className="my-6 flex w-full flex-col text-zinc-900">
+            <input
+              type="text"
+              value={_newParticipantName}
+              onChange={(e) => {
+                _setNewParticipantName(e.target.value)
+              }}
+              className=" text-md rounded-t-xl  bg-zinc-100  pt-4 pb-2 text-center font-bold focus:outline-none "
+            />
+            <div className="bg-zinc-100">
+              <div className={`mx-auto h-0.5 w-4/5`}></div>
+            </div>
+            <label
+              className={`rounded-b-xl bg-zinc-100 pt-2 pb-4 text-center text-sm `}
+            >
+              New Participant
+            </label>
+          </form>
+          <div className="mt-10 flex gap-4 self-end">
+            <button
+              onClick={() => {
+                _setNewParticipantName('')
+                _setNewParticipantDialogOpen(false)
+              }}
+              className="rounded-lg bg-zinc-700  py-2 px-4 font-bold"
+            >
+              <i className="las la-times text-lg text-red-600"></i>
+            </button>
+            <button
+              onClick={handleOnClickNewParticipant}
+              className="rounded-lg bg-zinc-700  py-2 px-4 font-bold"
+            >
+              <i className="las la-check text-lg text-green-600"></i>
+            </button>
           </div>
         </div>
       </CustomDialog>

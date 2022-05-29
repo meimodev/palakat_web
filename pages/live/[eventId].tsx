@@ -228,29 +228,22 @@ const LiveEvent = () => {
         </div>
 
         {scores.map((e: any) => {
+          let roundOff = (num, places) => {
+            const x = Math.pow(10, places)
+            return Math.round(num * x) / x
+          }
+
           return (
             <div
-              key={e}
+              key={roundOff(parseFloat(e), 3)}
               className={`flex h-11 w-11 items-center justify-center bg-cover bg-no-repeat ${scoreBackground} ${color}`}
             >
-              {e}
+              {roundOff(parseFloat(e), 3)}
             </div>
           )
         })}
       </div>
     )
-  }
-
-  const sortByPoint = (obj) => {
-    const order = []
-    const res = {}
-    Object.keys(obj).forEach((key) => {
-      return (order[obj[key]['total'] - 1] = key)
-    })
-    order.forEach((key) => {
-      res[key] = obj[key]
-    })
-    return res
   }
 
   const _buildScoreRow = () => {
@@ -262,9 +255,7 @@ const LiveEvent = () => {
 
     const sepperateRow = (start: number, finish: number) => {
       //make the object an 'array'
-      let objects = Object.keys(curr).sort((a, b) => {
-        return curr[b].total - curr[a].total
-      })
+      let objects = Object.keys(curr)
       return objects.map((e: any, i: number) => {
         let alteredIndex = i + start
         let alteredFinish =
